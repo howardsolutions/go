@@ -10,12 +10,18 @@ func calculateTax(price float32) (float32, float32) {
 }
 
 func birthday(pointerAge *int) {
+	if *pointerAge > 140 {
+		panic("Too old to be true")
+	}
+
 	*pointerAge++
 }
 
 func main() {
 	// result1, _ := calculateTax(100)
 	// fmt.Println(result1)
+
+	defer fmt.Println("Bye! Done!")
 
 	age := 22
 	birthday(&age)
