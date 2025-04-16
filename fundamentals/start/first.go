@@ -23,9 +23,26 @@ func main() {
 
 	defer fmt.Println("Bye! Done!")
 
-	age := 22
-	birthday(&age)
-	fmt.Println(age)
+	// age := 22
+	// birthday(&age)
+	// fmt.Println(age)
+
+	// Enum
+	const (
+		Monday    = 1
+		Tuesday   = 2
+		Wednesday = 3
+	)
+
+	fmt.Println("Monday: %d - Tue %d Wed %d", Monday, Tuesday, Wednesday)
+
+	// Enum
+	const (
+		Jan = iota + 1 // 1
+		Feb
+		Mar
+		Apr
+	)
 
 	// PrintData()
 }
