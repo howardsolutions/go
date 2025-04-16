@@ -1,6 +1,11 @@
-package backendproject
+package main
 
-import "howardsolutions/go/backend-project/internal/app"
+import (
+	"fmt"
+	"howardsolutions/go/backend-project/internal/app"
+	"net/http"
+	"time"
+)
 
 func main() {
 	app, err := app.NewApplication()
@@ -10,4 +15,23 @@ func main() {
 	}
 
 	app.Logger.Println("We are running our app!")
+
+	http.HandleFunc("/health", HealthCheck)
+
+	server := &http.Server{
+		Addr:         ":8080",
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 30 * time.Second,
+	}
+
+	err = server.ListenAndServe()
+
+	if err != nil {
+		app.Logger.Fatal(err)
+	}
+}
+
+func HealthCheck(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Status is available")
 }
