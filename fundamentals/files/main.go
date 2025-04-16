@@ -35,11 +35,32 @@ func main() {
 	// allNumbers := numbers[:]
 	fruits := []string{"apple", "banana", "strawberry"}
 
-	fmt.Printf("These are my fruits %v\n", fruits)
+	// fmt.Printf("These are my fruits %v\n", fruits)
 	fruits = append(fruits, "orange")
-	fmt.Printf("These are my fruits with orange %v\n", fruits)
+	// fmt.Printf("These are my fruits with orange %v\n", fruits)
 
 	moreFruits := []string{"blueberries", "tomato"}
 	fruits = append(fruits, moreFruits...)
-	fmt.Printf("These are my fruits with More fruits %v\n", fruits)
+	// fmt.Printf("These are my fruits with More fruits %v\n", fruits)
+
+	// Map
+	capitalCities := map[string]string{
+		"Usa":     "Washington",
+		"Vietnam": "Saigon",
+		"UK":      "London",
+	}
+
+	capital, exists := capitalCities["Germay"]
+
+	if exists {
+		fmt.Println("This is the capital", capital)
+	} else {
+		fmt.Println("Does not exists")
+	}
+
+	// delete key from map
+
+	delete(capitalCities, "UK")
+	fmt.Println("This is new deleted map", capitalCities)
+
 }
