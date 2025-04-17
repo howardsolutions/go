@@ -19,6 +19,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	// When everything is done => close the db connection => Defer it till the end
+	defer app.DB.Close()
 
 	app.Logger.Println("We are running our app!")
 
