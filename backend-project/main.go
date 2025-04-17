@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"howardsolutions/go/backend-project/internal/app"
+	"howardsolutions/go/backend-project/internal/routes"
 	"net/http"
 	"time"
 )
@@ -21,10 +22,11 @@ func main() {
 
 	app.Logger.Println("We are running our app!")
 
-	http.HandleFunc("/health", HealthCheck)
+	r := routes.SetupRoutes(app)
 
 	server := &http.Server{
-		Addr:         fmt.Sprintf("%d", port),
+		Addr:         fmt.Sprintf(":%d", port),
+		Handler:      r,
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
@@ -37,8 +39,4 @@ func main() {
 	if err != nil {
 		app.Logger.Fatal(err)
 	}
-}
-
-func HealthCheck(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Status is available")
 }
