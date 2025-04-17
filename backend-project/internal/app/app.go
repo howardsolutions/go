@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"howardsolutions/go/backend-project/internal/api"
 	"howardsolutions/go/backend-project/internal/store"
+	"howardsolutions/go/backend-project/migrations"
 	"log"
 	"net/http"
 	"os"
@@ -19,6 +20,13 @@ type Application struct {
 // Here we want to modifying the application and using it, that's why we need to return pointer to Application (struct)
 func NewApplication() (*Application, error) {
 	pgDB, err := store.Open()
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Setup file structure for DB migration
+	err = store.MigrateFS(pgDB, migrations.FS, ".")
 
 	if err != nil {
 		return nil, err
