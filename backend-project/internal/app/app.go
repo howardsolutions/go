@@ -20,21 +20,18 @@ type Application struct {
 // Here we want to modifying the application and using it, that's why we need to return pointer to Application (struct)
 func NewApplication() (*Application, error) {
 	pgDB, err := store.Open()
-
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to open database connection: %w", err)
 	}
 
 	// Setup file structure for DB migration
 	err = store.MigrateFS(pgDB, migrations.FS, ".")
-
 	if err != nil {
-		return nil, err
+		pgDB.Close() // Close DB connection if migration fails
+		return nil, fmt.Errorf("failed to run migrations: %w", err)
 	}
 
 	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
-
-	// Store will go here
 
 	// Handlers
 	workoutHandler := api.NewWorkoutHandler()

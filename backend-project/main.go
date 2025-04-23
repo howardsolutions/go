@@ -5,26 +5,30 @@ import (
 	"fmt"
 	"howardsolutions/go/backend-project/internal/app"
 	"howardsolutions/go/backend-project/internal/routes"
+	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
 func main() {
+	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
+
 	var port int
 	flag.IntVar(&port, "port", 8080, "Go backend server port")
 	flag.Parse()
 
-	app, err := app.NewApplication()
-
+	application, err := app.NewApplication()
 	if err != nil {
-		panic(err)
+		logger.Fatalf("Failed to initialize application: %v", err)
 	}
+
 	// When everything is done => close the db connection => Defer it till the end
-	defer app.DB.Close()
+	defer application.DB.Close()
 
-	app.Logger.Println("We are running our app!")
+	application.Logger.Println("Application initialized successfully!")
 
-	r := routes.SetupRoutes(app)
+	r := routes.SetupRoutes(application)
 
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%d", port),
@@ -34,11 +38,10 @@ func main() {
 		WriteTimeout: 30 * time.Second,
 	}
 
-	app.Logger.Printf("We are running on port %d \n", port)
+	application.Logger.Printf("Server starting on port %d\n", port)
 
 	err = server.ListenAndServe()
-
 	if err != nil {
-		app.Logger.Fatal(err)
+		application.Logger.Fatalf("Server failed to start: %v", err)
 	}
 }
