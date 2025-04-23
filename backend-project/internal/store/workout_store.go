@@ -1,5 +1,7 @@
 package store
 
+import "database/sql"
+
 type Workout struct {
 	ID              int            `json:"id"`
 	Title           string         `json:"title"`
@@ -18,4 +20,17 @@ type WorkoutEntry struct {
 	Weight          *float64 `json:"weight"`
 	Notes           string   `json:"notes"`
 	OrderIndex      int      `json:"order_index"`
+}
+
+type PostgreWorkoutStore struct {
+	db *sql.DB
+}
+
+func NewPostgreWorkoutStore(db *sql.DB) *PostgreWorkoutStore {
+	return &PostgreWorkoutStore{db: db}
+}
+
+type WorkoutStore interface {
+	CreateWorkout(*Workout) (*Workout, error)
+	GetWorkoutByID(id int64) (*Workout, error)
 }
